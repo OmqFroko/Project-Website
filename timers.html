@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="Config/style.css" />
   <link rel="stylesheet" href="Config/timers.css" />
 </head>
-<body>
+<body class="auth-pending">
   <div class="shell">
     <header class="topbar">
       <div class="topbar__mark">
@@ -22,10 +22,13 @@
       </div>
       <nav>
         <a href="index.html">Home</a>
+        <div id="topbar-user"></div>
       </nav>
     </header>
 
-    <main>
+    <p class="auth-loading">Checking your account…</p>
+
+    <main class="authed-only">
       <p>Timers</p>
       <h1>Did I forget? I'll get <br /><span>notified</span>, anyways.</h1>
       <p class="lede">
@@ -57,6 +60,10 @@
             </div>
             <button type="submit" class="btn btn-primary">Create timer</button>
           </div>
+          <div class="field-check" style="margin-top: 14px;">
+            <input id="timer-repeat" type="checkbox" />
+            <label for="timer-repeat">Repeat weekly — after it finishes, it resets 7 days later</label>
+          </div>
           <p id="form-error" class="form-error"></p>
         </form>
       </section>
@@ -69,6 +76,6 @@
     </main>
   </div>
 
-  <script src="Config/timers.js"></script>
+  <script type="module" src="Config/timer.js"></script>
 </body>
 </html>
