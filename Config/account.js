@@ -1,4 +1,13 @@
-import { auth, signUpWithEmail, signInWithEmail, signInWithGoogle, doSignOut, isAdmin, describeAuthError } from "./auth.js";
+import {
+  auth,
+  signUpWithUsername,
+  signInWithUsername,
+  doSignOut,
+  isAdmin,
+  getUsername,
+  isValidUsername,
+  describeAuthError,
+} from "./auth.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 const signedOutPanel = document.getElementById("signed-out-panel");
@@ -6,10 +15,9 @@ const signedInPanel = document.getElementById("signed-in-panel");
 const tabSignIn = document.getElementById("tab-signin");
 const tabSignUp = document.getElementById("tab-signup");
 const authForm = document.getElementById("auth-form");
-const emailInput = document.getElementById("auth-email");
+const usernameInput = document.getElementById("auth-username");
 const passwordInput = document.getElementById("auth-password");
 const submitBtn = document.getElementById("auth-submit");
-const googleBtn = document.getElementById("auth-google");
 const errorEl = document.getElementById("auth-error");
 
 let mode = "signin"; // or "signup"
@@ -28,16 +36,21 @@ tabSignUp.addEventListener("click", () => setMode("signup"));
 authForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   errorEl.textContent = "";
-  submitBtn.disabled = true;
 
-  const email = emailInput.value.trim();
+  const username = usernameInput.value.trim();
   const password = passwordInput.value;
 
+  if (!isValidUsername(username)) {
+    errorEl.textContent = "Usernames are 3-24 characters: letters, numbers, . _ or -.";
+    return;
+  }
+
+  submitBtn.disabled = true;
   try {
     if (mode === "signin") {
-      await signInWithEmail(email, password);
+      await signInWithUsername(username, password);
     } else {
-      await signUpWithEmail(email, password);
+      await signUpWithUsername(username, password);
     }
   } catch (err) {
     errorEl.textContent = describeAuthError(err);
@@ -46,31 +59,16 @@ authForm.addEventListener("submit", async (e) => {
   }
 });
 
-googleBtn.addEventListener("click", async () => {
-  errorEl.textContent = "";
-  try {
-    await signInWithGoogle();
-  } catch (err) {
-    errorEl.textContent = describeAuthError(err);
-  }
-});
-
 document.getElementById("go-signout").addEventListener("click", () => {
   doSignOut();
 });
-
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
-}
 
 onAuthStateChanged(auth, (user) => {
   document.body.classList.remove("auth-pending");
   if (user) {
     signedOutPanel.classList.add("is-hidden");
     signedInPanel.classList.remove("is-hidden");
-    document.getElementById("signed-in-email").textContent = user.email || "";
+    document.getElementById("signed-in-username").textContent = getUsername(user);
     document.getElementById("signed-in-badge").innerHTML = isAdmin(user)
       ? '<span class="badge-admin">Admin</span>'
       : "";

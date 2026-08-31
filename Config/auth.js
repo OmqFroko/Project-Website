@@ -1,30 +1,48 @@
 import { auth } from "./firebase-init.js";
-import { ADMIN_EMAILS } from "./firebase-config.js";
+import { ADMIN_USERNAMES, USERNAME_DOMAIN } from "./firebase-config.js";
 import {
   onAuthStateChanged,
   signOut as firebaseSignOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
+  updateProfile,
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 export { auth };
 
+const USERNAME_PATTERN = /^[a-z0-9_.-]{3,24}$/i;
+
+export function isValidUsername(username) {
+  return USERNAME_PATTERN.test(username);
+}
+
+function usernameToEmail(username) {
+  return `${username.trim().toLowerCase()}@${USERNAME_DOMAIN}`;
+}
+
+export function getUsername(user) {
+  if (!user) return "";
+  if (user.displayName) return user.displayName;
+  return (user.email || "").split("@")[0];
+}
+
 export function isAdmin(user) {
-  return !!user && ADMIN_EMAILS.includes((user.email || "").toLowerCase());
+  const username = getUsername(user).toLowerCase();
+  return !!username && ADMIN_USERNAMES.map((u) => u.toLowerCase()).includes(username);
 }
 
-export function signUpWithEmail(email, password) {
-  return createUserWithEmailAndPassword(auth, email, password);
+export async function signUpWithUsername(username, password) {
+  const credential = await createUserWithEmailAndPassword(
+    auth,
+    usernameToEmail(username),
+    password
+  );
+  await updateProfile(credential.user, { displayName: username });
+  return credential;
 }
 
-export function signInWithEmail(email, password) {
-  return signInWithEmailAndPassword(auth, email, password);
-}
-
-export function signInWithGoogle() {
-  return signInWithPopup(auth, new GoogleAuthProvider());
+export function signInWithUsername(username, password) {
+  return signInWithEmailAndPassword(auth, usernameToEmail(username), password);
 }
 
 export function doSignOut() {
@@ -36,17 +54,13 @@ export function describeAuthError(error) {
   const code = error && error.code;
   switch (code) {
     case "auth/email-already-in-use":
-      return "That email already has an account. Try signing in instead.";
-    case "auth/invalid-email":
-      return "That email address doesn't look right.";
+      return "That username is already taken. Try signing in instead.";
     case "auth/weak-password":
       return "Use at least 6 characters for your password.";
     case "auth/invalid-credential":
     case "auth/wrong-password":
     case "auth/user-not-found":
-      return "That email and password don't match an account.";
-    case "auth/popup-closed-by-user":
-      return "The Google sign-in window was closed before finishing.";
+      return "That username and password don't match an account.";
     case "auth/too-many-requests":
       return "Too many attempts. Wait a bit and try again.";
     default:
@@ -55,7 +69,7 @@ export function describeAuthError(error) {
 }
 
 /**
- * Fills the page's #topbar-user slot with the signed-in person's email,
+ * Fills the page's #topbar-user slot with the signed-in person's username,
  * an Admin badge when it applies, and a sign-out button.
  */
 export function renderTopbarUser(user) {
@@ -63,7 +77,7 @@ export function renderTopbarUser(user) {
   if (!slot) return;
 
   slot.innerHTML = `
-    <span class="topbar-user__email">${escapeHtml(user.email || "")}</span>
+    <span class="topbar-user__email">${escapeHtml(getUsername(user))}</span>
     ${isAdmin(user) ? '<span class="badge-admin">Admin</span>' : ""}
     <button id="topbar-signout" class="btn btn-ghost">Sign out</button>
   `;

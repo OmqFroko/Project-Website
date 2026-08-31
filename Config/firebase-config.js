@@ -11,8 +11,11 @@ export const firebaseConfig = {
   appId: "1:919947242045:web:20469701c1c07ff0d5d854",
 };
 
-// Any account whose email is in this list sees the "Admin" badge next to their name.
-// It doesn't unlock anything else yet — it's just a label for now.
-export const ADMIN_EMAILS = [
-  "you@example.com",
+export const USERNAME_DOMAIN = "workshop.local";
+
+export const ADMIN_USERNAMES = [
+  "admin",
 ];
+
+export const VAPID_PUBLIC_KEY =
+  "BA8nYRR1F64-ZOeuq6f5z2qnLcfdFvYpiZULWuGWR3RjPGgRAdF4H5sG3kPZGvY9BD-nmh2op5pURnzBvsi0RtI";

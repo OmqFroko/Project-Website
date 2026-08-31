@@ -27,44 +27,6 @@
   margin-bottom: 14px;
 }
 
-.auth-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 20px 0;
-  color: var(--ink-faint);
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.auth-divider::before,
-.auth-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--panel-border);
-}
-
-.btn-google {
-  background: #fff;
-  color: #1f1f1f;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn-google:hover {
-  background: #f2f2f2;
-}
-
-.btn-google svg {
-  width: 16px;
-  height: 16px;
-}
-
 .signed-in-card {
   display: flex;
   align-items: center;

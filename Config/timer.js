@@ -1,5 +1,6 @@
 import { requireAuth } from "./auth.js";
 import { db } from "./firebase-init.js";
+import { pushSupported, hasActivePushSubscription, enablePushNotifications } from "./push.js";
 import {
   collection,
   query,
@@ -54,9 +55,9 @@ function watchTimers() {
   });
 }
 
-/* ---------------- notification permission banner ---------------- */
+/* ---------------- notification / push permission banner ---------------- */
 
-function renderBanner() {
+async function renderBanner() {
   if (!notificationsSupported) {
     banner.classList.remove("is-hidden", "is-ok");
     banner.classList.add("is-error");
@@ -66,32 +67,46 @@ function renderBanner() {
     return;
   }
 
-  if (Notification.permission === "granted") {
-    banner.classList.add("is-hidden");
-    return;
-  }
-
-  banner.classList.remove("is-hidden");
-
   if (Notification.permission === "denied") {
-    banner.classList.remove("is-ok");
+    banner.classList.remove("is-hidden", "is-ok");
     banner.classList.add("is-error");
     banner.querySelector(".banner__text").innerHTML =
       "<strong>Notifications are blocked.</strong> Enable them for this site in your browser's settings to get alerts.";
     enableBtn.style.display = "none";
-  } else {
-    banner.classList.remove("is-ok", "is-error");
-    banner.querySelector(".banner__text").innerHTML =
-      "<strong>Notifications are off.</strong> Turn them on so a timer can alert you when it finishes.";
-    enableBtn.style.display = "";
+    return;
   }
+
+  const alreadyEnabled = await hasActivePushSubscription();
+  if (alreadyEnabled) {
+    banner.classList.add("is-hidden");
+    return;
+  }
+
+  banner.classList.remove("is-hidden", "is-ok", "is-error");
+  banner.querySelector(".banner__text").innerHTML = pushSupported()
+    ? "<strong>Notifications are off.</strong> Turn them on to get alerted even if this tab is closed."
+    : "<strong>Notifications are off.</strong> Turn them on so a timer can alert you while this tab is open.";
+  enableBtn.style.display = "";
+  enableBtn.disabled = false;
+  enableBtn.textContent = "Turn on notifications";
 }
 
-if (notificationsSupported) {
-  enableBtn.addEventListener("click", () => {
-    Notification.requestPermission().then(renderBanner);
-  });
-}
+enableBtn.addEventListener("click", async () => {
+  enableBtn.disabled = true;
+  enableBtn.textContent = "Turning on…";
+  try {
+    await enablePushNotifications(currentUser);
+    await renderBanner();
+  } catch (err) {
+    banner.classList.remove("is-hidden", "is-ok");
+    banner.classList.add("is-error");
+    banner.querySelector(".banner__text").innerHTML = `<strong>Couldn't turn that on.</strong> ${escapeHtml(
+      err.message || "Please try again."
+    )}`;
+    enableBtn.disabled = false;
+    enableBtn.textContent = "Turn on notifications";
+  }
+});
 
 /* ---------------- sound + notification on completion ---------------- */
 
