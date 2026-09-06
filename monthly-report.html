@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Report — Workshop</title>
+  <link rel="icon" href="Images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Config/style.css">
+</head>
+<body>
+
+  <div id="wk-content">
+
+    <a class="back-link page-shell" href="index.html">&larr; Workshop</a>
+
+    <header class="report-hero page-shell">
+      <input
+        type="text"
+        id="report-title"
+        class="report-hero__title"
+        placeholder="Untitled report"
+        autocomplete="off"
+      >
+      <p class="report-hero__subtitle">
+        Saved automatically as you type — closing the tab won't lose it.
+      </p>
+    </header>
+
+    <main class="page-shell">
+      <section class="topics" id="topics" aria-label="Report topics">
+        <!-- Topic cards rendered by Config/monthly-report.js from TOPICS -->
+      </section>
+
+      <div class="report-actions">
+        <button type="button" id="save-month-btn" class="report-actions__save">
+          Save as new month
+        </button>
+        <span class="report-actions__hint">Files the current draft into the archive below and starts a fresh one.</span>
+      </div>
+
+      <section class="archive" aria-label="Past months">
+        <h2 class="archive__heading">Past months</h2>
+        <div id="archive-list" class="archive__list">
+          <!-- Archived reports rendered by Config/monthly-report.js -->
+        </div>
+        <p id="archive-empty" class="archive__empty">Nothing saved yet.</p>
+      </section>
+    </main>
+
+    <footer class="hub-footer">
+      <p>Workshop &middot; updated as needed</p>
+    </footer>
+
+  </div>
+
+  <script src="Config/gate.js"></script>
+  <script src="Config/monthly-report.js" defer></script>
+</body>
+</html>

@@ -8,8 +8,8 @@
 // Delay between one card revealing and the next, in ms.
 const REVEAL_STAGGER_MS = 60;
 
-// How many empty slots to show by default while there are no tools yet.
-const EMPTY_SLOT_COUNT = 4;
+// How many empty slots to show alongside the active tools below.
+const EMPTY_SLOT_COUNT = 2;
 
 // Pegboard hole grid drawn behind the hero illustration.
 const PEG_HOLE_COLUMNS = 8;
@@ -19,16 +19,34 @@ const PEG_HOLE_RADIUS = 2.2;
 const PEG_HOLE_BOARD = { x: 20, y: 16, width: 320, height: 288 };
 
 // accepted status values: "active" (clickable card) | "coming-soon" (open slot)
-const TOOLS = Array.from({ length: EMPTY_SLOT_COUNT }, () => ({
-  title: "Open slot",
-  description: "No tool assigned yet.",
-  href: null,
-  status: "coming-soon",
-  icon: "slot",
-}));
+const TOOLS = [
+  {
+    title: "Monthly Report",
+    description: "What went well, what didn't, and what's planned next month.",
+    href: "monthly-report.html",
+    status: "active",
+    icon: "report",
+  },
+  {
+    title: "To-Do",
+    description: "A running list of tasks, saved as you go.",
+    href: "todo.html",
+    status: "active",
+    icon: "todo",
+  },
+  ...Array.from({ length: EMPTY_SLOT_COUNT }, () => ({
+    title: "Open slot",
+    description: "No tool assigned yet.",
+    href: null,
+    status: "coming-soon",
+    icon: "slot",
+  })),
+];
 
 const ICONS = {
   slot: '<svg class="tool-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>',
+  report: '<svg class="tool-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="1.5"/><line x1="8.5" y1="8" x2="15.5" y2="8"/><line x1="8.5" y1="12" x2="15.5" y2="12"/><line x1="8.5" y1="16" x2="12.5" y2="16"/></svg>',
+  todo: '<svg class="tool-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l2.5 2.5L16 9"/></svg>',
 };
 
 function buildCard(tool) {
