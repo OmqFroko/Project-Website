@@ -1,12 +1,15 @@
-/* ==========================================================================
-   Workshop — password gate. Runs on every protected page.
-   NOTE: this is a client-side deterrent only, not real security — the
-   password below is visible to anyone who reads this file. Don't put
-   anything actually sensitive behind it.
-   ========================================================================== */
 
-const GATE_PASSWORD = "admin123";
+
+const GATE_PASSWORD_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
 const GATE_STORAGE_KEY = "workshop-unlocked";
+
+async function hashPassword(value) {
+  const encoded = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", encoded);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 function unlockSite() {
   document.documentElement.classList.add("wk-unlocked");
@@ -30,10 +33,11 @@ function showGate() {
   const input = overlay.querySelector("#wk-gate-input");
   const error = overlay.querySelector("#wk-gate-error");
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    if (input.value === GATE_PASSWORD) {
+    const attemptHash = await hashPassword(input.value);
+    if (attemptHash === GATE_PASSWORD_HASH) {
       localStorage.setItem(GATE_STORAGE_KEY, "true");
       unlockSite();
       overlay.remove();
