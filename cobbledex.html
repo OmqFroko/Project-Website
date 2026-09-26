@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cobblemon Dex — Workshop</title>
+  <link rel="icon" href="Images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Config/style.css">
+</head>
+<body>
+
+  <div id="wk-content">
+
+    <a class="back-link page-shell" href="index.html">&larr; Workshop</a>
+
+    <header class="dex-hero page-shell">
+      <h1 class="dex-hero__title">Cobblemon Dex</h1>
+      <p class="dex-hero__subtitle">
+        Track what's caught, check stats and evolutions, and build movesets to save as decks.
+      </p>
+    </header>
+
+    <main class="page-shell">
+      <div class="dex-controls">
+        <input type="text" id="dex-search" class="dex-controls__search" placeholder="Search by name" autocomplete="off">
+        <select id="dex-type-filter" class="dex-controls__select">
+          <option value="all">All types</option>
+        </select>
+        <div class="dex-controls__caught" role="group" aria-label="Filter by caught status">
+          <button type="button" class="dex-controls__btn is-active" data-caught="all">All</button>
+          <button type="button" class="dex-controls__btn" data-caught="caught">Caught</button>
+          <button type="button" class="dex-controls__btn" data-caught="uncaught">Not caught</button>
+        </div>
+        <label class="dex-controls__shiny">
+          <input type="checkbox" id="dex-shiny-toggle">
+          <span>Shiny</span>
+        </label>
+      </div>
+
+      <div id="dex-grid" class="dex-grid" aria-label="Pokémon list"></div>
+      <p id="dex-empty" class="dex-empty" hidden>No Pokémon match those filters.</p>
+
+      <section id="dex-detail" class="dex-detail" hidden aria-label="Pokémon detail">
+        <!-- Rendered by Config/cobbledex.js when a Pokémon is selected -->
+      </section>
+    </main>
+
+    <footer class="hub-footer">
+      <p>Workshop &middot; updated as needed</p>
+    </footer>
+
+  </div>
+
+  <script src="Config/gate.js"></script>
+  <script src="Config/cobbledex-data.js" defer></script>
+  <script src="Config/cobbledex.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Page — Workshop</title>
+  <link rel="icon" href="Images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Config/style.css">
+</head>
+<body>
+
+  <div id="wk-content">
+
+    <a class="back-link page-shell" href="index.html">&larr; Workshop</a>
+
+    <header class="feedback-hero page-shell">
+      <h1 class="feedback-hero__title">Feedback Page</h1>
+      <p class="feedback-hero__subtitle">
+        Write shorthand notes, let presets expand them, then copy the finished message. Saved automatically as you go.
+      </p>
+    </header>
+
+    <main class="page-shell">
+
+      <section class="feedback-panel">
+        <h2 class="feedback-panel__title">Compose</h2>
+
+        <label class="feedback-field">
+          <span class="feedback-field__label">Username</span>
+          <input type="text" id="feedback-username" class="feedback-field__input" placeholder="e.g. RobloxCommunity42" autocomplete="off">
+        </label>
+
+        <div class="note-builder">
+          <span class="feedback-field__label">Event Notes</span>
+          <div class="note-builder__quickadd">
+            <input type="text" id="event-quickadd" class="feedback-field__input" placeholder="Type a note or a trigger phrase, then Add" autocomplete="off">
+            <button type="button" id="event-add-btn" class="note-builder__add">Add</button>
+          </div>
+          <div id="event-match-hint" class="note-builder__suggestions" hidden></div>
+          <textarea id="event-notes" class="feedback-field__textarea" rows="5" placeholder="Notes build up here — edit freely"></textarea>
+        </div>
+
+        <div class="note-builder">
+          <span class="feedback-field__label">Simulation Notes</span>
+          <div class="note-builder__quickadd">
+            <input type="text" id="sim-quickadd" class="feedback-field__input" placeholder="Type a note or a trigger phrase, then Add" autocomplete="off">
+            <button type="button" id="sim-add-btn" class="note-builder__add">Add</button>
+          </div>
+          <div id="sim-match-hint" class="note-builder__suggestions" hidden></div>
+          <textarea id="sim-notes" class="feedback-field__textarea" rows="5" placeholder="Notes build up here — edit freely"></textarea>
+        </div>
+
+        <button type="button" id="feedback-clear-btn" class="feedback-clear">Clear this draft</button>
+      </section>
+
+      <section class="feedback-panel">
+        <div class="feedback-panel__header">
+          <h2 class="feedback-panel__title">Output</h2>
+          <button type="button" id="copy-output-btn" class="feedback-copy">Copy</button>
+        </div>
+        <pre id="feedback-output" class="feedback-output"></pre>
+      </section>
+
+      <section class="feedback-panel">
+        <h2 class="feedback-panel__title">Presets</h2>
+        <p class="feedback-panel__hint">
+          A preset fires when its trigger phrase appears anywhere in what you type (not case-sensitive). If more than one matches, the first one in this list wins.
+        </p>
+
+        <form id="preset-form" class="preset-form">
+          <input type="text" id="preset-trigger-input" class="feedback-field__input" placeholder="Trigger word or phrase (e.g. flash)" autocomplete="off">
+          <textarea id="preset-message-input" class="feedback-field__textarea" rows="3" placeholder="Full preset message to insert"></textarea>
+          <button type="submit" id="preset-save-btn" class="feedback-copy">Save preset</button>
+        </form>
+
+        <div id="preset-list" class="preset-list"></div>
+        <p id="preset-empty" class="note-builder__hint">No presets yet — add one above.</p>
+      </section>
+
+    </main>
+
+    <footer class="hub-footer">
+      <p>Workshop &middot; updated as needed</p>
+    </footer>
+
+  </div>
+
+  <script src="Config/gate.js"></script>
+  <script src="Config/feedback.js" defer></script>
+</body>
+</html>

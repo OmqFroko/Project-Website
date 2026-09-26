@@ -9,7 +9,7 @@
 const REVEAL_STAGGER_MS = 60;
 
 // How many empty slots to show alongside the active tools below.
-const EMPTY_SLOT_COUNT = 2;
+const EMPTY_SLOT_COUNT = 1;
 
 // Pegboard hole grid drawn behind the hero illustration.
 const PEG_HOLE_COLUMNS = 8;
@@ -34,6 +34,13 @@ const TOOLS = [
     status: "active",
     icon: "todo",
   },
+  {
+    title: "Feedback Page",
+    description: "Compose feedback from shorthand notes and saved presets.",
+    href: "feedback.html",
+    status: "active",
+    icon: "feedback",
+  },
   ...Array.from({ length: EMPTY_SLOT_COUNT }, () => ({
     title: "Open slot",
     description: "No tool assigned yet.",
@@ -47,6 +54,7 @@ const ICONS = {
   slot: '<svg class="tool-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>',
   report: '<svg class="tool-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="1.5"/><line x1="8.5" y1="8" x2="15.5" y2="8"/><line x1="8.5" y1="12" x2="15.5" y2="12"/><line x1="8.5" y1="16" x2="12.5" y2="16"/></svg>',
   todo: '<svg class="tool-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l2.5 2.5L16 9"/></svg>',
+  feedback: '<svg class="tool-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16v11H8l-4 4V5z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="12.5" x2="13" y2="12.5"/></svg>',
 };
 
 function buildCard(tool) {
